@@ -1,28 +1,39 @@
 using System;
+using System.Diagnostics;
 using Xamarin.Forms;
 
-/// <summary>
-/// A button which has a timeout between taps
-/// </summary>
-public class SingleButton : Button
+namespace ThreeGoodThings.Custom_Controls
 {
-    public new event EventHandler Clicked;
-    private long lastTicks = 0;
-
-    private const long secondsBetween = 2;
-    private const long ticksBetween = secondsBetween * TimeSpan.TicksPerSecond;
-
-    public SingleButton() : base() =>
-        base.Clicked += OnClick;
-
-    private void OnClick(object sender, EventArgs e)
+    /// <summary>
+    /// A button which has a timeout between taps
+    /// </summary>
+    public class SingleButton : Button
     {
-        var ticks = DateTime.Now.Ticks;
+        // Clicked event, overriding the button clicked event
+        public new event EventHandler Clicked;
 
-        if (lastTicks + ticksBetween < ticks)
+        // Stopwatch used to measure time between clicks
+        private Stopwatch stopwatch = Stopwatch.StartNew();
+
+        // The seconds between each allowed button press
+        private const double secondsBetween = .5;
+
+        // Constructor, calls the base constructor and also assigns the OnClick event
+        public SingleButton() : base() =>
+            base.Clicked += OnClick;
+
+        // Called when the button is pressed
+        private void OnClick(object sender, EventArgs e)
         {
-            lastTicks = ticks + ticksBetween;
-            Clicked(sender, e);
+            // If the right amount of time has elapsed
+            if (stopwatch.Elapsed.TotalSeconds > secondsBetween)
+            {
+                // Call the Clicked event
+                Clicked(sender, e);
+
+                // Restart the stopwatch
+                stopwatch.Restart();
+            }
         }
     }
 }
