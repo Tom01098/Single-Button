@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using Xamarin.Forms;
 
-namespace ThreeGoodThings.Custom_Controls
+namespace CustomControls
 {
     /// <summary>
     /// A button which has a timeout between taps
